@@ -4,7 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Incident Report Builder | SancLogic</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Build professional incident reports with the SancLogic Report Builder. Free tool for SOC analysts and security professionals.">
+  <meta name="author" content="SancLogic">
+  <meta name="keywords" content="incident report, SOC, security analyst, DFIR, threat hunting, IR template">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Incident Report Builder | SancLogic">
+  <meta property="og:description" content="Free IR report generator for security analysts. Structure your findings with the Who/What/When/Where/Why/How framework.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sanclogic.github.io/report-builder">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Incident Report Builder | SancLogic">
+  <meta name="twitter:description" content="Free IR report generator for security analysts.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body { font-family: 'JetBrains Mono', monospace; background: #0a0a0f; color: #e6edf3; margin: 0; padding: 0; min-height: 100vh; }
@@ -14,7 +35,8 @@
     .header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: #f0f6fc; margin: 0 0 0.5rem 0; }
     .header h1 .accent { color: #ef4444; }
     .header p { color: #6e7681; font-size: 0.85rem; margin: 0.5rem 0; }
-    .header .disclaimer { color: #8b949e; font-size: 0.75rem; margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 6px; display: inline-block; }
+    .header .disclaimer { color: #8b949e; font-size: 0.75rem; margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; display: inline-block; }
+    .header .disclaimer strong { color: #ef4444; }
     .header .disclaimer a { color: #22c55e; text-decoration: none; }
     .header .disclaimer a:hover { text-decoration: underline; }
 
@@ -67,30 +89,37 @@
     .add-field-btn { background: rgba(139, 92, 246, 0.15); border: 1px dashed rgba(139, 92, 246, 0.4); color: #a78bfa; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; margin-top: 12px; transition: all 0.2s; }
     .add-field-btn:hover { background: rgba(139, 92, 246, 0.25); border-color: rgba(139, 92, 246, 0.6); }
 
-    .generate-btn { 
-      width: 100%; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 12px; 
-      background: transparent; 
-      border: 1px solid #ef4444; 
-      color: #ef4444; 
-      padding: 1rem 2rem; 
-      font-family: 'JetBrains Mono', monospace; 
-      font-size: 0.9rem; 
-      font-weight: 500; 
-      letter-spacing: 2px; 
-      border-radius: 4px; 
-      cursor: pointer; 
-      margin-top: 2rem; 
-      transition: all 0.2s; 
+    .generate-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: transparent;
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      padding: 1rem 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: all 0.2s;
     }
-    .generate-btn:hover { 
-      background: rgba(239, 68, 68, 0.1); 
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); 
+    .generate-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
     }
     .generate-btn svg { width: 16px; height: 16px; stroke: #ef4444; }
+
+    .draft-controls { display: flex; gap: 1rem; margin-top: 1rem; justify-content: center; }
+    .draft-btn { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; transition: all 0.2s; }
+    .draft-btn:hover { background: rgba(34, 197, 94, 0.25); }
+    .draft-btn.danger { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+    .draft-btn.danger:hover { background: rgba(239, 68, 68, 0.25); }
+    .draft-status { font-size: 0.7rem; color: #6e7681; text-align: center; margin-top: 0.5rem; }
 
     .footer { margin-top: 3rem; padding: 2rem 0; border-top: 1px solid rgba(48, 54, 61, 0.6); display: flex; justify-content: space-between; align-items: center; }
     .footer-brand { }
@@ -122,11 +151,15 @@
     .modal-btn.cancel { background: rgba(48, 54, 61, 0.6); color: #8b949e; }
     .modal-btn.continue { background: #ef4444; color: #fff; }
 
-    @media (max-width: 900px) { 
-      .container { padding: 1.5rem; } 
-      .header h1 { font-size: 1.5rem; } 
-      .tier-info { flex-direction: column; align-items: center; } 
-      .custom-field { flex-wrap: wrap; } 
+    /* Skip link for accessibility */
+    .skip-link { position: absolute; top: -40px; left: 0; background: #ef4444; color: #fff; padding: 8px 16px; z-index: 1000; text-decoration: none; }
+    .skip-link:focus { top: 0; }
+
+    @media (max-width: 900px) {
+      .container { padding: 1.5rem; }
+      .header h1 { font-size: 1.5rem; }
+      .tier-info { flex-direction: column; align-items: center; }
+      .custom-field { flex-wrap: wrap; }
       .custom-field input.label-input { width: 100%; }
       .footer { flex-direction: column; gap: 1.5rem; text-align: center; }
       .footer-socials { justify-content: center; }
@@ -135,20 +168,26 @@
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <div class="container">
 
-  <div class="header">
+  <header class="header">
     <h1>INCIDENT <span class="accent">REPORT</span> BUILDER</h1>
     <p>Build a professional IR report. Core sections required, appendix optional.</p>
     <div class="disclaimer">
-      📝 This is a template to help structure your report after completing an investigation.<br>
-      Copy the generated output and edit as needed. <a href="https://sanclogic.com/investigation-guide" target="_blank">Need help? Read the Investigation Guide →</a>
+      <strong>⚠️ COMPLETE YOUR INVESTIGATION FIRST.</strong><br>
+      This tool structures your findings — it doesn't replace the work.<br>
+      If you haven't written a report from scratch yet, do that first.<br>
+      <a href="https://sanclogic.com/investigation-guide" target="_blank" rel="noopener noreferrer">Need help? Read the Investigation Guide →</a>
     </div>
     <div class="tier-info">
       <span class="tier-badge t1">T1 Basic = Core sections</span>
       <span class="tier-badge t2">T2 Full = Core + Appendix</span>
     </div>
-  </div>
+  </header>
+
+  <main id="main-content">
 
   <!-- CORE SECTIONS -->
   <div class="section-divider"><span>Core Report (Required)</span></div>
@@ -163,7 +202,7 @@
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">2-3 sentences for leadership</label>
+        <label class="field-label" for="exec-summary">2-3 sentences for leadership</label>
         <textarea id="exec-summary" rows="3" placeholder="On [DATE], a security incident was detected on [SYSTEM] involving [BRIEF DESCRIPTION]. The attacker [KEY ACTIONS]. [CURRENT STATUS]."></textarea>
       </div>
     </div>
@@ -179,15 +218,15 @@
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Threat Actor IPs</label>
+        <label class="field-label" for="who-ips">Threat Actor IPs</label>
         <input type="text" id="who-ips" placeholder="e.g., 192.168.1.100, 10.0.0.50">
       </div>
       <div class="field">
-        <label class="field-label">Compromised Accounts</label>
+        <label class="field-label" for="who-accounts">Compromised Accounts</label>
         <input type="text" id="who-accounts" placeholder="e.g., jsmith (domain user)">
       </div>
       <div id="who-custom-fields"></div>
-      <button class="add-field-btn" onclick="addCustomField('who-custom-fields')">+ Add Field</button>
+      <button type="button" class="add-field-btn" onclick="addCustomField('who-custom-fields')">+ Add Field</button>
     </div>
   </div>
 
@@ -201,7 +240,7 @@
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Attacker Actions (one per line)</label>
+        <label class="field-label" for="what-actions">Attacker Actions (one per line)</label>
         <textarea id="what-actions" rows="5" placeholder="1. Gained initial access via [METHOD]
 2. Established persistence using [TECHNIQUE]
 3. Moved laterally to [TARGET]
@@ -220,11 +259,11 @@
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Date Range</label>
+        <label class="field-label" for="when-range">Date Range</label>
         <input type="text" id="when-range" placeholder="e.g., 2026-01-15 09:00:00 to 2026-01-15 17:30:00">
       </div>
       <div class="field">
-        <label class="field-label">Key Timestamps</label>
+        <label class="field-label" for="when-timestamps">Key Timestamps</label>
         <textarea id="when-timestamps" rows="3" placeholder="09:15:00 - Initial access
 12:30:00 - Lateral movement
 15:45:00 - Data exfiltration"></textarea>
@@ -242,16 +281,16 @@
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Target Systems</label>
+        <label class="field-label" for="where-systems">Target Systems</label>
         <input type="text" id="where-systems" placeholder="e.g., WORKSTATION-01 (Windows 10)">
       </div>
       <div class="field">
-        <label class="field-label">Malware/Tool Paths</label>
+        <label class="field-label" for="where-paths">Malware/Tool Paths</label>
         <textarea id="where-paths" rows="2" placeholder="C:\Users\[USER]\Downloads\[MALWARE]
 C:\Windows\Temp\[PAYLOAD]"></textarea>
       </div>
       <div id="where-custom-fields"></div>
-      <button class="add-field-btn" onclick="addCustomField('where-custom-fields')">+ Add Field</button>
+      <button type="button" class="add-field-btn" onclick="addCustomField('where-custom-fields')">+ Add Field</button>
     </div>
   </div>
 
@@ -265,11 +304,11 @@ C:\Windows\Temp\[PAYLOAD]"></textarea>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Root Cause</label>
+        <label class="field-label" for="why-root">Root Cause</label>
         <input type="text" id="why-root" placeholder="e.g., User clicked malicious link in phishing email">
       </div>
       <div class="field">
-        <label class="field-label">Attacker Objective</label>
+        <label class="field-label" for="why-objective">Attacker Objective</label>
         <input type="text" id="why-objective" placeholder="e.g., Financial gain, data theft, espionage">
       </div>
     </div>
@@ -285,7 +324,7 @@ C:\Windows\Temp\[PAYLOAD]"></textarea>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Attack Methodology</label>
+        <label class="field-label" for="how-method">Attack Methodology</label>
         <textarea id="how-method" rows="5" placeholder="Initial access via [VECTOR]
 Execution using [TECHNIQUE]
 Persistence through [METHOD]
@@ -305,19 +344,19 @@ Exfiltration to [DESTINATION]"></textarea>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Immediate (0-24 hours)</label>
+        <label class="field-label" for="rec-immediate">Immediate (0-24 hours)</label>
         <textarea id="rec-immediate" rows="3" placeholder="Reset compromised credentials
 Isolate affected systems
 Block malicious IPs/domains"></textarea>
       </div>
       <div class="field">
-        <label class="field-label">Short-term (1-7 days)</label>
+        <label class="field-label" for="rec-short">Short-term (1-7 days)</label>
         <textarea id="rec-short" rows="3" placeholder="Sweep environment for IOCs
 Review access logs
 Conduct user awareness training"></textarea>
       </div>
       <div class="field">
-        <label class="field-label">Long-term (30-90 days)</label>
+        <label class="field-label" for="rec-long">Long-term (30-90 days)</label>
         <textarea id="rec-long" rows="3" placeholder="Implement additional controls
 Review security architecture
 Enhance monitoring capabilities"></textarea>
@@ -335,15 +374,15 @@ Enhance monitoring capabilities"></textarea>
         <span class="section-title">Impact</span>
         <span class="section-tag opt">Optional</span>
       </div>
-      <div class="toggle on" onclick="toggleSection(this)"></div>
+      <div class="toggle on" onclick="toggleSection(this)" role="switch" aria-checked="true" tabindex="0" aria-label="Toggle Impact section"></div>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Potential Damage</label>
+        <label class="field-label" for="impact-potential">Potential Damage</label>
         <input type="text" id="impact-potential" placeholder="e.g., Data breach, financial loss, reputational damage">
       </div>
       <div class="field">
-        <label class="field-label">Actual Impact</label>
+        <label class="field-label" for="impact-actual">Actual Impact</label>
         <input type="text" id="impact-actual" placeholder="e.g., X records exposed, $Y estimated loss">
       </div>
     </div>
@@ -359,11 +398,11 @@ Enhance monitoring capabilities"></textarea>
         <span class="section-title">Detailed Timeline</span>
         <span class="section-tag opt">Appendix</span>
       </div>
-      <div class="toggle" onclick="toggleSection(this)"></div>
+      <div class="toggle" onclick="toggleSection(this)" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle Timeline section"></div>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Full chronological timeline</label>
+        <label class="field-label" for="timeline">Full chronological timeline</label>
         <textarea id="timeline" class="large" rows="6" placeholder="YYYY-MM-DD HH:MM:SS - Event description
 YYYY-MM-DD HH:MM:SS - Event description
 YYYY-MM-DD HH:MM:SS - Event description"></textarea>
@@ -378,29 +417,29 @@ YYYY-MM-DD HH:MM:SS - Event description"></textarea>
         <span class="section-title">Indicators of Compromise</span>
         <span class="section-tag opt">Appendix</span>
       </div>
-      <div class="toggle" onclick="toggleSection(this)"></div>
+      <div class="toggle" onclick="toggleSection(this)" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle IOCs section"></div>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">File Hashes</label>
+        <label class="field-label" for="ioc-hashes">File Hashes</label>
         <textarea id="ioc-hashes" rows="2" placeholder="SHA256: abc123...
 MD5: def456..."></textarea>
       </div>
       <div class="field">
-        <label class="field-label">Domains</label>
+        <label class="field-label" for="ioc-domains">Domains</label>
         <input type="text" id="ioc-domains" placeholder="e.g., malicious[.]com, evil[.]net">
       </div>
       <div class="field">
-        <label class="field-label">IPs</label>
+        <label class="field-label" for="ioc-ips">IPs</label>
         <input type="text" id="ioc-ips" placeholder="e.g., 192.168.1.100, 10.0.0.50">
       </div>
       <div class="field">
-        <label class="field-label">File Paths</label>
+        <label class="field-label" for="ioc-paths">File Paths</label>
         <textarea id="ioc-paths" rows="2" placeholder="C:\path\to\malware.exe
 /tmp/suspicious_file"></textarea>
       </div>
       <div id="ioc-custom-fields"></div>
-      <button class="add-field-btn" onclick="addCustomField('ioc-custom-fields')">+ Add Field (Registry, Accounts, etc.)</button>
+      <button type="button" class="add-field-btn" onclick="addCustomField('ioc-custom-fields')">+ Add Field (Registry, Accounts, etc.)</button>
     </div>
   </div>
 
@@ -408,14 +447,14 @@ MD5: def456..."></textarea>
   <div class="section appendix" data-section="mitre">
     <div class="section-header">
       <div class="section-left">
-        <span class="section-title">MITRE ATT&CK Mapping</span>
+        <span class="section-title">MITRE ATT&amp;CK Mapping</span>
         <span class="section-tag opt">Appendix</span>
       </div>
-      <div class="toggle" onclick="toggleSection(this)"></div>
+      <div class="toggle" onclick="toggleSection(this)" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle MITRE ATT&amp;CK section"></div>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">Techniques (Tactic | Technique | ID)</label>
+        <label class="field-label" for="mitre-map">Techniques (Tactic | Technique | ID)</label>
         <textarea id="mitre-map" class="large" rows="6" placeholder="Initial Access | Phishing | T1566
 Execution | Command and Scripting | T1059
 Persistence | Scheduled Task | T1053
@@ -432,15 +471,15 @@ Exfiltration | Exfil Over C2 | T1041"></textarea>
         <span class="section-title">OSINT</span>
         <span class="section-tag opt">Appendix</span>
       </div>
-      <div class="toggle" onclick="toggleSection(this)"></div>
+      <div class="toggle" onclick="toggleSection(this)" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle OSINT section"></div>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">VirusTotal Findings</label>
+        <label class="field-label" for="osint-vt">VirusTotal Findings</label>
         <textarea id="osint-vt" rows="2" placeholder="[HASH]: X/Y detections, [MALWARE_FAMILY]"></textarea>
       </div>
       <div id="osint-custom-fields"></div>
-      <button class="add-field-btn" onclick="addCustomField('osint-custom-fields')">+ Add Source (AbuseIPDB, Shodan, etc.)</button>
+      <button type="button" class="add-field-btn" onclick="addCustomField('osint-custom-fields')">+ Add Source (AbuseIPDB, Shodan, etc.)</button>
     </div>
   </div>
 
@@ -451,11 +490,11 @@ Exfiltration | Exfil Over C2 | T1041"></textarea>
         <span class="section-title">Detection Queries</span>
         <span class="section-tag opt">Appendix</span>
       </div>
-      <div class="toggle" onclick="toggleSection(this)"></div>
+      <div class="toggle" onclick="toggleSection(this)" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle Queries section"></div>
     </div>
     <div class="section-body">
       <div class="field">
-        <label class="field-label">SPL / KQL Queries</label>
+        <label class="field-label" for="queries">SPL / KQL Queries</label>
         <textarea id="queries" class="large" rows="6" placeholder="index=main EventCode=1
 | search Image=*suspicious*
 | table _time Computer User CommandLine"></textarea>
@@ -470,7 +509,7 @@ Exfiltration | Exfil Over C2 | T1041"></textarea>
         <span class="section-title">Evidence Screenshots</span>
         <span class="section-tag opt">Appendix</span>
       </div>
-      <div class="toggle" onclick="toggleSection(this)"></div>
+      <div class="toggle" onclick="toggleSection(this)" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle Evidence section"></div>
     </div>
     <div class="section-body">
       <div id="evidence-fields">
@@ -479,56 +518,67 @@ Exfiltration | Exfil Over C2 | T1041"></textarea>
           <input type="text" class="evidence-input" placeholder="Description of screenshot/evidence">
         </div>
       </div>
-      <button class="add-field-btn" onclick="addEvidenceField()">+ Add Evidence</button>
+      <button type="button" class="add-field-btn" onclick="addEvidenceField()">+ Add Evidence</button>
     </div>
   </div>
 
-  <button class="generate-btn" onclick="validateAndGenerate()">
+  <button type="button" class="generate-btn" onclick="validateAndGenerate()">
     [ GENERATE_REPORT ] →
   </button>
 
-  <div class="footer">
+  <div class="draft-controls">
+    <button type="button" class="draft-btn" onclick="saveDraft()">💾 Save Draft</button>
+    <button type="button" class="draft-btn" onclick="loadDraft()">📂 Load Draft</button>
+    <button type="button" class="draft-btn danger" onclick="clearDraft()">🗑️ Clear Draft</button>
+  </div>
+  <div class="draft-status" id="draft-status"></div>
+
+  </main>
+
+  <footer class="footer">
     <div class="footer-brand">
       <div class="brand-name">S A N C L O G I C</div>
       <div class="brand-tagline"><span class="find">FIND</span><span class="evil">EVIL</span>.<span class="build">BUILD</span><span class="defenses">DEFENSES</span>.</div>
       <div class="brand-sub">Offense. Defense. Logic.</div>
     </div>
     <div class="footer-credit">
-      <p>Report template adapted from <a href="https://www.youtube.com/@MyDFIR" target="_blank">MYDFIR</a></p>
+      <p>Report template adapted from <a href="https://www.youtube.com/@MyDFIR" target="_blank" rel="noopener noreferrer">MYDFIR</a></p>
     </div>
-    <div class="footer-socials">
-      <a href="https://www.youtube.com/@SancLogic" target="_blank" title="YouTube">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    <nav class="footer-socials" aria-label="Social media links">
+      <a href="https://www.youtube.com/@SancLogic" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       </a>
-      <a href="https://linkedin.com/in/sanclogic" target="_blank" title="LinkedIn">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      <a href="https://linkedin.com/in/sanclogic" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
-      <a href="https://github.com/SancLogic" target="_blank" title="GitHub">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      <a href="https://github.com/SancLogic" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
       </a>
-      <a href="https://sanclogic.com" target="_blank" title="Website">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <a href="https://sanclogic.com" target="_blank" rel="noopener noreferrer" aria-label="SancLogic Website">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       </a>
-    </div>
-  </div>
+    </nav>
+  </footer>
 
 </div>
 
 <!-- VALIDATION MODAL -->
-<div class="modal" id="modal">
+<div class="modal" id="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
   <div class="modal-content">
-    <div class="modal-title">⚠️ Incomplete T1 Report</div>
+    <div class="modal-title" id="modal-title">⚠️ Incomplete T1 Report</div>
     <div class="modal-text">The following required fields are empty:</div>
     <ul class="modal-list" id="missing-list"></ul>
     <div class="modal-text">Generate anyway?</div>
     <div class="modal-actions">
-      <button class="modal-btn cancel" onclick="closeModal()">Go Back</button>
-      <button class="modal-btn continue" onclick="generateReport()">Generate Anyway</button>
+      <button type="button" class="modal-btn cancel" onclick="closeModal()">Go Back</button>
+      <button type="button" class="modal-btn continue" onclick="generateReport()">Generate Anyway</button>
     </div>
   </div>
 </div>
 
 <script>
+const STORAGE_KEY = 'sanclogic_report_draft';
+
 const requiredFields = {
   'exec-summary': 'Executive Summary',
   'who-ips': 'Threat Actor IPs',
@@ -545,17 +595,42 @@ const requiredFields = {
 let customFieldCount = 0;
 let evidenceCount = 1;
 
+// Sanitize text to prevent XSS
+function sanitizeText(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function addCustomField(containerId) {
   customFieldCount++;
   const container = document.getElementById(containerId);
   const div = document.createElement('div');
   div.className = 'custom-field';
   div.id = `custom-field-${customFieldCount}`;
-  div.innerHTML = `
-    <input type="text" class="label-input" placeholder="Field Label" data-custom-label="true">
-    <input type="text" class="value-input" placeholder="Value" data-custom-value="true">
-    <button class="remove-btn" onclick="removeField('custom-field-${customFieldCount}')">&times;</button>
-  `;
+
+  const labelInput = document.createElement('input');
+  labelInput.type = 'text';
+  labelInput.className = 'label-input';
+  labelInput.placeholder = 'Field Label';
+  labelInput.setAttribute('data-custom-label', 'true');
+
+  const valueInput = document.createElement('input');
+  valueInput.type = 'text';
+  valueInput.className = 'value-input';
+  valueInput.placeholder = 'Value';
+  valueInput.setAttribute('data-custom-value', 'true');
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'remove-btn';
+  removeBtn.textContent = '×';
+  removeBtn.setAttribute('aria-label', 'Remove field');
+  removeBtn.onclick = () => removeField(`custom-field-${customFieldCount}`);
+
+  div.appendChild(labelInput);
+  div.appendChild(valueInput);
+  div.appendChild(removeBtn);
   container.appendChild(div);
 }
 
@@ -565,25 +640,54 @@ function addEvidenceField() {
   const div = document.createElement('div');
   div.className = 'field';
   div.id = `evidence-field-${evidenceCount}`;
-  div.innerHTML = `
-    <label class="field-label">Evidence ${evidenceCount}</label>
-    <div style="display: flex; gap: 8px;">
-      <input type="text" class="evidence-input" placeholder="Description of screenshot/evidence" style="flex: 1;">
-      <button class="remove-btn" onclick="removeField('evidence-field-${evidenceCount}')" style="width: 36px; height: 36px; background: rgba(239, 68, 68, 0.2); border: none; color: #ef4444; border-radius: 4px; cursor: pointer; font-size: 1.2rem;">&times;</button>
-    </div>
-  `;
+
+  const label = document.createElement('label');
+  label.className = 'field-label';
+  label.textContent = `Evidence ${evidenceCount}`;
+
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'display: flex; gap: 8px;';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'evidence-input';
+  input.placeholder = 'Description of screenshot/evidence';
+  input.style.flex = '1';
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'remove-btn';
+  removeBtn.style.cssText = 'width: 36px; height: 36px;';
+  removeBtn.textContent = '×';
+  removeBtn.setAttribute('aria-label', 'Remove evidence');
+  removeBtn.onclick = () => removeField(`evidence-field-${evidenceCount}`);
+
+  wrapper.appendChild(input);
+  wrapper.appendChild(removeBtn);
+  div.appendChild(label);
+  div.appendChild(wrapper);
   container.appendChild(div);
 }
 
 function removeField(id) {
-  document.getElementById(id).remove();
+  const el = document.getElementById(id);
+  if (el) el.remove();
 }
 
 function toggleSection(toggle) {
-  toggle.classList.toggle('on');
+  const isOn = toggle.classList.toggle('on');
+  toggle.setAttribute('aria-checked', isOn);
   const section = toggle.closest('.section');
-  section.classList.toggle('disabled', !toggle.classList.contains('on'));
+  section.classList.toggle('disabled', !isOn);
 }
+
+// Keyboard accessibility for toggles
+document.addEventListener('keydown', function(e) {
+  if (e.target.classList.contains('toggle') && (e.key === 'Enter' || e.key === ' ')) {
+    e.preventDefault();
+    toggleSection(e.target);
+  }
+});
 
 function isSectionEnabled(sectionName) {
   const section = document.querySelector(`[data-section="${sectionName}"]`);
@@ -612,20 +716,121 @@ function getCustomFields(containerId) {
 
 function getEvidenceFields() {
   const fields = [];
-  document.querySelectorAll('.evidence-input').forEach((input, i) => {
+  document.querySelectorAll('.evidence-input').forEach((input) => {
     if (input.value.trim()) fields.push(input.value.trim());
   });
   return fields;
 }
+
+// Draft save/load functions
+function saveDraft() {
+  const draft = {
+    timestamp: new Date().toISOString(),
+    fields: {}
+  };
+
+  // Save all input and textarea values
+  document.querySelectorAll('input[id], textarea[id]').forEach(el => {
+    draft.fields[el.id] = el.value;
+  });
+
+  // Save toggle states
+  draft.toggles = {};
+  document.querySelectorAll('[data-section]').forEach(section => {
+    const toggle = section.querySelector('.toggle');
+    if (toggle) {
+      draft.toggles[section.dataset.section] = toggle.classList.contains('on');
+    }
+  });
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+    showDraftStatus('Draft saved!', 'success');
+  } catch (e) {
+    showDraftStatus('Failed to save draft', 'error');
+  }
+}
+
+function loadDraft() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) {
+      showDraftStatus('No draft found', 'info');
+      return;
+    }
+
+    const draft = JSON.parse(saved);
+
+    // Restore field values
+    Object.entries(draft.fields || {}).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    });
+
+    // Restore toggle states
+    Object.entries(draft.toggles || {}).forEach(([section, isOn]) => {
+      const sectionEl = document.querySelector(`[data-section="${section}"]`);
+      if (sectionEl) {
+        const toggle = sectionEl.querySelector('.toggle');
+        if (toggle) {
+          toggle.classList.toggle('on', isOn);
+          toggle.setAttribute('aria-checked', isOn);
+          sectionEl.classList.toggle('disabled', !isOn);
+        }
+      }
+    });
+
+    const date = new Date(draft.timestamp).toLocaleString();
+    showDraftStatus(`Draft loaded (saved ${date})`, 'success');
+  } catch (e) {
+    showDraftStatus('Failed to load draft', 'error');
+  }
+}
+
+function clearDraft() {
+  if (confirm('Clear saved draft? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    showDraftStatus('Draft cleared', 'info');
+  }
+}
+
+function showDraftStatus(message, type) {
+  const status = document.getElementById('draft-status');
+  status.textContent = message;
+  status.style.color = type === 'error' ? '#ef4444' : type === 'success' ? '#22c55e' : '#6e7681';
+  setTimeout(() => { status.textContent = ''; }, 3000);
+}
+
+// Auto-save every 30 seconds if there's content
+setInterval(() => {
+  const hasContent = Object.keys(requiredFields).some(id => getValue(id));
+  if (hasContent) {
+    const draft = localStorage.getItem(STORAGE_KEY);
+    const currentData = JSON.stringify(Object.fromEntries(
+      Object.keys(requiredFields).map(id => [id, getValue(id)])
+    ));
+    // Only auto-save if content changed
+    if (!draft || JSON.parse(draft).fields !== currentData) {
+      saveDraft();
+      showDraftStatus('Auto-saved', 'info');
+    }
+  }
+}, 30000);
 
 function validateAndGenerate() {
   const missing = [];
   for (const [field, label] of Object.entries(requiredFields)) {
     if (!getValue(field)) missing.push(label);
   }
-  
+
   if (missing.length > 0) {
-    document.getElementById('missing-list').innerHTML = missing.map(m => `<li>${m}</li>`).join('');
+    const missingList = document.getElementById('missing-list');
+    missingList.innerHTML = '';
+    missing.forEach(m => {
+      const li = document.createElement('li');
+      li.textContent = m;
+      missingList.appendChild(li);
+    });
     document.getElementById('modal').classList.add('show');
   } else {
     generateReport();
@@ -639,10 +844,10 @@ function closeModal() {
 function generateReport() {
   closeModal();
   const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  
-  // Build markdown
-  let md = `# INCIDENT REPORT\n\n**Date:** ${today}\n\n---\n\n`;
-  
+
+  // Build markdown (sanitized)
+  let md = `# INCIDENT REPORT\n\n**Date:** ${sanitizeText(today)}\n\n---\n\n`;
+
   if (getValue('exec-summary')) md += `## Executive Summary\n\n${getValue('exec-summary')}\n\n`;
 
   let who = '';
@@ -743,9 +948,9 @@ function generateReport() {
 
   md += `\n---\n\n*Report template adapted from [MYDFIR](https://www.youtube.com/@MyDFIR) | Built with [SancLogic](https://sanclogic.com)*`;
 
-  // Build HTML
+  // Build HTML output (sanitized)
   let html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Incident Report</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Space Grotesk', sans-serif; background: #fff; color: #1a1a1a; padding: 3rem 4rem; max-width: 1400px; margin: 0 auto; line-height: 1.7; font-size: 16px; }
@@ -772,56 +977,56 @@ th { background: #f5f5f5; font-weight: 600; font-size: 0.85rem; text-transform: 
 .btn-copy { background: #22c55e; color: #fff; }
 @media print { .actions { display: none; } body { padding: 2rem; } .footer { display: none; } }
 </style></head><body>
-<div class="header"><h1>INCIDENT REPORT</h1><p>${today}</p></div>`;
+<div class="header"><h1>INCIDENT REPORT</h1><p>${sanitizeText(today)}</p></div>`;
 
-  if (getValue('exec-summary')) html += `<div class="section"><h2>Executive Summary</h2><p>${getValue('exec-summary')}</p></div>`;
+  if (getValue('exec-summary')) html += `<div class="section"><h2>Executive Summary</h2><p>${sanitizeText(getValue('exec-summary'))}</p></div>`;
 
   let whoHtml = '';
-  if (getValue('who-ips')) whoHtml += `<p><strong>Threat Actor IPs:</strong> ${getValue('who-ips')}</p>`;
-  if (getValue('who-accounts')) whoHtml += `<p><strong>Compromised Accounts:</strong> ${getValue('who-accounts')}</p>`;
-  getCustomFields('who-custom-fields').forEach(f => { whoHtml += `<p><strong>${f.label}:</strong> ${f.value}</p>`; });
+  if (getValue('who-ips')) whoHtml += `<p><strong>Threat Actor IPs:</strong> ${sanitizeText(getValue('who-ips'))}</p>`;
+  if (getValue('who-accounts')) whoHtml += `<p><strong>Compromised Accounts:</strong> ${sanitizeText(getValue('who-accounts'))}</p>`;
+  getCustomFields('who-custom-fields').forEach(f => { whoHtml += `<p><strong>${sanitizeText(f.label)}:</strong> ${sanitizeText(f.value)}</p>`; });
   if (whoHtml) html += `<div class="section"><h2>Who</h2>${whoHtml}</div>`;
 
   if (getValue('what-actions')) {
     const items = getValue('what-actions').split('\n').filter(l => l.trim());
-    html += `<div class="section"><h2>What</h2><ul>${items.map(i => '<li>' + i + '</li>').join('')}</ul></div>`;
+    html += `<div class="section"><h2>What</h2><ul>${items.map(i => '<li>' + sanitizeText(i) + '</li>').join('')}</ul></div>`;
   }
 
   let whenHtml = '';
-  if (getValue('when-range')) whenHtml += `<p><strong>Date Range:</strong> ${getValue('when-range')}</p>`;
+  if (getValue('when-range')) whenHtml += `<p><strong>Date Range:</strong> ${sanitizeText(getValue('when-range'))}</p>`;
   if (getValue('when-timestamps')) {
     const times = getValue('when-timestamps').split('\n').filter(l => l.trim());
-    whenHtml += `<ul>${times.map(t => '<li>' + t + '</li>').join('')}</ul>`;
+    whenHtml += `<ul>${times.map(t => '<li>' + sanitizeText(t) + '</li>').join('')}</ul>`;
   }
   if (whenHtml) html += `<div class="section"><h2>When</h2>${whenHtml}</div>`;
 
   let whereHtml = '';
-  if (getValue('where-systems')) whereHtml += `<p><strong>Target Systems:</strong> ${getValue('where-systems')}</p>`;
-  if (getValue('where-paths')) whereHtml += `<pre>${getValue('where-paths')}</pre>`;
-  getCustomFields('where-custom-fields').forEach(f => { whereHtml += `<p><strong>${f.label}:</strong> ${f.value}</p>`; });
+  if (getValue('where-systems')) whereHtml += `<p><strong>Target Systems:</strong> ${sanitizeText(getValue('where-systems'))}</p>`;
+  if (getValue('where-paths')) whereHtml += `<pre>${sanitizeText(getValue('where-paths'))}</pre>`;
+  getCustomFields('where-custom-fields').forEach(f => { whereHtml += `<p><strong>${sanitizeText(f.label)}:</strong> ${sanitizeText(f.value)}</p>`; });
   if (whereHtml) html += `<div class="section"><h2>Where</h2>${whereHtml}</div>`;
 
   let whyHtml = '';
-  if (getValue('why-root')) whyHtml += `<p><strong>Root Cause:</strong> ${getValue('why-root')}</p>`;
-  if (getValue('why-objective')) whyHtml += `<p><strong>Attacker Objective:</strong> ${getValue('why-objective')}</p>`;
+  if (getValue('why-root')) whyHtml += `<p><strong>Root Cause:</strong> ${sanitizeText(getValue('why-root'))}</p>`;
+  if (getValue('why-objective')) whyHtml += `<p><strong>Attacker Objective:</strong> ${sanitizeText(getValue('why-objective'))}</p>`;
   if (whyHtml) html += `<div class="section"><h2>Why</h2>${whyHtml}</div>`;
 
   if (getValue('how-method')) {
     const steps = getValue('how-method').split('\n').filter(l => l.trim());
-    html += `<div class="section"><h2>How</h2><ul>${steps.map(s => '<li>' + s + '</li>').join('')}</ul></div>`;
+    html += `<div class="section"><h2>How</h2><ul>${steps.map(s => '<li>' + sanitizeText(s) + '</li>').join('')}</ul></div>`;
   }
 
   if (isSectionEnabled('impact')) {
     let impactHtml = '';
-    if (getValue('impact-potential')) impactHtml += `<p><strong>Potential Damage:</strong> ${getValue('impact-potential')}</p>`;
-    if (getValue('impact-actual')) impactHtml += `<p><strong>Actual Impact:</strong> ${getValue('impact-actual')}</p>`;
+    if (getValue('impact-potential')) impactHtml += `<p><strong>Potential Damage:</strong> ${sanitizeText(getValue('impact-potential'))}</p>`;
+    if (getValue('impact-actual')) impactHtml += `<p><strong>Actual Impact:</strong> ${sanitizeText(getValue('impact-actual'))}</p>`;
     if (impactHtml) html += `<div class="section"><h2>Impact</h2>${impactHtml}</div>`;
   }
 
   let recsHtml = '';
-  if (getValue('rec-immediate')) recsHtml += `<p><strong>Immediate (0-24h):</strong></p><ul>${getValue('rec-immediate').split('\n').filter(l=>l.trim()).map(l=>'<li>'+l+'</li>').join('')}</ul>`;
-  if (getValue('rec-short')) recsHtml += `<p><strong>Short-term (1-7 days):</strong></p><ul>${getValue('rec-short').split('\n').filter(l=>l.trim()).map(l=>'<li>'+l+'</li>').join('')}</ul>`;
-  if (getValue('rec-long')) recsHtml += `<p><strong>Long-term (30-90 days):</strong></p><ul>${getValue('rec-long').split('\n').filter(l=>l.trim()).map(l=>'<li>'+l+'</li>').join('')}</ul>`;
+  if (getValue('rec-immediate')) recsHtml += `<p><strong>Immediate (0-24h):</strong></p><ul>${getValue('rec-immediate').split('\n').filter(l=>l.trim()).map(l=>'<li>'+sanitizeText(l)+'</li>').join('')}</ul>`;
+  if (getValue('rec-short')) recsHtml += `<p><strong>Short-term (1-7 days):</strong></p><ul>${getValue('rec-short').split('\n').filter(l=>l.trim()).map(l=>'<li>'+sanitizeText(l)+'</li>').join('')}</ul>`;
+  if (getValue('rec-long')) recsHtml += `<p><strong>Long-term (30-90 days):</strong></p><ul>${getValue('rec-long').split('\n').filter(l=>l.trim()).map(l=>'<li>'+sanitizeText(l)+'</li>').join('')}</ul>`;
   if (recsHtml) html += `<div class="section"><h2>Recommendations</h2>${recsHtml}</div>`;
 
   let hasAppendix = false;
@@ -830,40 +1035,40 @@ th { background: #f5f5f5; font-weight: 600; font-size: 0.85rem; text-transform: 
   if (isSectionEnabled('timeline') && getValue('timeline')) {
     hasAppendix = true;
     const times = getValue('timeline').split('\n').filter(l => l.trim());
-    appendixHtml += `<div class="section"><h2>Timeline</h2><ul>${times.map(t => '<li>' + t + '</li>').join('')}</ul></div>`;
+    appendixHtml += `<div class="section"><h2>Timeline</h2><ul>${times.map(t => '<li>' + sanitizeText(t) + '</li>').join('')}</ul></div>`;
   }
 
   if (isSectionEnabled('iocs')) {
     let iocsHtml = '';
-    if (getValue('ioc-hashes')) iocsHtml += `<p><strong>File Hashes:</strong></p><pre>${getValue('ioc-hashes')}</pre>`;
-    if (getValue('ioc-domains')) iocsHtml += `<p><strong>Domains:</strong> ${getValue('ioc-domains')}</p>`;
-    if (getValue('ioc-ips')) iocsHtml += `<p><strong>IPs:</strong> ${getValue('ioc-ips')}</p>`;
-    if (getValue('ioc-paths')) iocsHtml += `<p><strong>File Paths:</strong></p><pre>${getValue('ioc-paths')}</pre>`;
-    getCustomFields('ioc-custom-fields').forEach(f => { iocsHtml += `<p><strong>${f.label}:</strong> ${f.value}</p>`; });
+    if (getValue('ioc-hashes')) iocsHtml += `<p><strong>File Hashes:</strong></p><pre>${sanitizeText(getValue('ioc-hashes'))}</pre>`;
+    if (getValue('ioc-domains')) iocsHtml += `<p><strong>Domains:</strong> ${sanitizeText(getValue('ioc-domains'))}</p>`;
+    if (getValue('ioc-ips')) iocsHtml += `<p><strong>IPs:</strong> ${sanitizeText(getValue('ioc-ips'))}</p>`;
+    if (getValue('ioc-paths')) iocsHtml += `<p><strong>File Paths:</strong></p><pre>${sanitizeText(getValue('ioc-paths'))}</pre>`;
+    getCustomFields('ioc-custom-fields').forEach(f => { iocsHtml += `<p><strong>${sanitizeText(f.label)}:</strong> ${sanitizeText(f.value)}</p>`; });
     if (iocsHtml) { hasAppendix = true; appendixHtml += `<div class="section"><h2>Indicators of Compromise</h2>${iocsHtml}</div>`; }
   }
 
   if (isSectionEnabled('mitre') && getValue('mitre-map')) {
     hasAppendix = true;
     const rows = getValue('mitre-map').split('\n').filter(l => l.trim());
-    appendixHtml += `<div class="section"><h2>MITRE ATT&CK Mapping</h2><table><thead><tr><th>Tactic</th><th>Technique</th><th>ID</th></tr></thead><tbody>`;
+    appendixHtml += `<div class="section"><h2>MITRE ATT&amp;CK Mapping</h2><table><thead><tr><th>Tactic</th><th>Technique</th><th>ID</th></tr></thead><tbody>`;
     rows.forEach(row => {
       const parts = row.split('|').map(p => p.trim());
-      if (parts.length >= 3) appendixHtml += `<tr><td>${parts[0]}</td><td>${parts[1]}</td><td>${parts[2]}</td></tr>`;
+      if (parts.length >= 3) appendixHtml += `<tr><td>${sanitizeText(parts[0])}</td><td>${sanitizeText(parts[1])}</td><td>${sanitizeText(parts[2])}</td></tr>`;
     });
     appendixHtml += `</tbody></table></div>`;
   }
 
   if (isSectionEnabled('osint')) {
     let osintHtml = '';
-    if (getValue('osint-vt')) osintHtml += `<p><strong>VirusTotal:</strong></p><pre>${getValue('osint-vt')}</pre>`;
-    getCustomFields('osint-custom-fields').forEach(f => { osintHtml += `<p><strong>${f.label}:</strong></p><pre>${f.value}</pre>`; });
+    if (getValue('osint-vt')) osintHtml += `<p><strong>VirusTotal:</strong></p><pre>${sanitizeText(getValue('osint-vt'))}</pre>`;
+    getCustomFields('osint-custom-fields').forEach(f => { osintHtml += `<p><strong>${sanitizeText(f.label)}:</strong></p><pre>${sanitizeText(f.value)}</pre>`; });
     if (osintHtml) { hasAppendix = true; appendixHtml += `<div class="section"><h2>OSINT</h2>${osintHtml}</div>`; }
   }
 
   if (isSectionEnabled('queries') && getValue('queries')) {
     hasAppendix = true;
-    appendixHtml += `<div class="section"><h2>Detection Queries</h2><pre>${getValue('queries')}</pre></div>`;
+    appendixHtml += `<div class="section"><h2>Detection Queries</h2><pre>${sanitizeText(getValue('queries'))}</pre></div>`;
   }
 
   if (isSectionEnabled('evidence')) {
@@ -871,18 +1076,18 @@ th { background: #f5f5f5; font-weight: 600; font-size: 0.85rem; text-transform: 
     if (evidence.length > 0) {
       hasAppendix = true;
       appendixHtml += `<div class="section"><h2>Evidence</h2>`;
-      evidence.forEach((e, i) => { appendixHtml += `<div class="evidence-box"><strong>Evidence ${i+1}:</strong> ${e}<br><em>[Insert screenshot]</em></div>`; });
+      evidence.forEach((e, i) => { appendixHtml += `<div class="evidence-box"><strong>Evidence ${i+1}:</strong> ${sanitizeText(e)}<br><em>[Insert screenshot]</em></div>`; });
       appendixHtml += `</div>`;
     }
   }
 
   if (hasAppendix) html += `<div class="appendix-divider">Appendix</div>` + appendixHtml;
 
-  html += `<div class="footer">Report template adapted from <a href="https://www.youtube.com/@MyDFIR" target="_blank">MYDFIR</a> | Built with <a href="https://sanclogic.com" target="_blank">SancLogic</a></div>`;
+  html += `<div class="footer">Report template adapted from <a href="https://www.youtube.com/@MyDFIR" target="_blank" rel="noopener noreferrer">MYDFIR</a> | Built with <a href="https://sanclogic.com" target="_blank" rel="noopener noreferrer">SancLogic</a></div>`;
 
   html += `<div class="actions">
-    <button class="btn btn-print" onclick="window.print()">Print</button>
-    <button class="btn btn-copy" onclick="copyMd()">Copy as Markdown</button>
+    <button type="button" class="btn btn-print" onclick="window.print()">Print</button>
+    <button type="button" class="btn btn-copy" onclick="copyMd()">Copy as Markdown</button>
   </div>
   <script>
     const mdContent = ${JSON.stringify(md)};
@@ -895,12 +1100,27 @@ th { background: #f5f5f5; font-weight: 600; font-size: 0.85rem; text-transform: 
   <\/script></body></html>`;
 
   const newWindow = window.open('', '_blank');
-  newWindow.document.write(html);
-  newWindow.document.close();
+  if (newWindow) {
+    newWindow.document.write(html);
+    newWindow.document.close();
+  } else {
+    alert('Popup blocked. Please allow popups for this site.');
+  }
 }
 
+// Initialize disabled state for appendix sections
 document.querySelectorAll('.appendix .toggle:not(.on)').forEach(t => {
   t.closest('.section').classList.add('disabled');
+});
+
+// Check for existing draft on load
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    const draft = JSON.parse(saved);
+    const date = new Date(draft.timestamp).toLocaleString();
+    showDraftStatus(`Draft available from ${date} - click "Load Draft" to restore`, 'info');
+  }
 });
 </script>
 
